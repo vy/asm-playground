@@ -1,4 +1,4 @@
-package com.vlkan;
+package com.vlkan.v1;
 
 public enum Log4j {;
 

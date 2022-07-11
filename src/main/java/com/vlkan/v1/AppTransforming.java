@@ -1,4 +1,4 @@
-package com.vlkan;
+package com.vlkan.v1;
 
 import org.objectweb.asm.*;
 
@@ -7,7 +7,7 @@ import java.lang.invoke.MethodHandles;
 public class AppTransforming {
 
     public static void main(String[] args) throws Exception {
-        injectSourceLocation("com.vlkan.AppActual");
+        injectSourceLocation("com.vlkan.v1.AppActual");
         AppActual.main(args);
     }
 
@@ -76,7 +76,7 @@ public class AppTransforming {
         @Override
         public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
             boolean loggerCalled = Opcodes.INVOKESTATIC == opcode &&
-                    "com/vlkan/Log4j".equals(owner) &&
+                    "com/vlkan/v1/Log4j".equals(owner) &&
                     "log".equals(name) &&
                     "()V".equals(descriptor);
             if (loggerCalled) {
@@ -86,21 +86,21 @@ public class AppTransforming {
         }
 
         private void injectSourceLocation() {
-            visitFieldInsn(Opcodes.GETSTATIC, "com/vlkan/Log4j", "LOCATION_REF", "Ljava/lang/ThreadLocal;");
+            visitFieldInsn(Opcodes.GETSTATIC, "com/vlkan/v1/Log4j", "LOCATION_REF", "Ljava/lang/ThreadLocal;");
             super.visitMethodInsn(
                     Opcodes.INVOKEVIRTUAL,
                     "java/lang/ThreadLocal",
                     "get",
                     "()Ljava/lang/Object;",
                     false);
-            visitTypeInsn(Opcodes.CHECKCAST, "com/vlkan/Log4j$SourceLocation");
+            visitTypeInsn(Opcodes.CHECKCAST, "com/vlkan/v1/Log4j$SourceLocation");
             visitLdcInsn(fileName);
             visitLdcInsn(className);
             visitLdcInsn(methodName);
             visitIntInsn(Opcodes.BIPUSH, lineNumber);
             super.visitMethodInsn(
                     Opcodes.INVOKEVIRTUAL,
-                    "com/vlkan/Log4j$SourceLocation",
+                    "com/vlkan/v1/Log4j$SourceLocation",
                     "init",
                     "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V",
                     false);
