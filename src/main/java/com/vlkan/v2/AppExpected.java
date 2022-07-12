@@ -1,22 +1,22 @@
 package com.vlkan.v2;
 
-import static com.vlkan.v2.Log4j.log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AppExpected {
 
+    private static final Logger LOGGER = LogManager.getLogger();
+
     public static void main(String[] args) {
-        System.out.println("should log at line 9");
-        log(Log4jLocationRegistry.get(0));
+        LOGGER.atInfo().withLocation(Log4jLocationRegistry.get(0)).log("should log at line 11");
         System.out.println("nothing to see here");
-        System.out.println("should log at line 12");
-        log(Log4jLocationRegistry.get(1));
+        LOGGER.atInfo().withLocation(Log4jLocationRegistry.get(1)).log("should log at line 13");
         f();
     }
 
     private static void f() {
         System.out.println("adding some indirection");
-        System.out.println("should log at line 19");
-        log(Log4jLocationRegistry.get(2));
+        LOGGER.atInfo().withLocation(Log4jLocationRegistry.get(2)).log("should log at line 19");
     }
 
     static {
